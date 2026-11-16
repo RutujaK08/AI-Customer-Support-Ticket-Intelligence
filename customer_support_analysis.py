@@ -6,14 +6,12 @@
 import re
 import warnings
 from pathlib import Path
-
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
-
 
 # ------------------------------------------------------------
 # 1. LOAD DATASET
@@ -28,7 +26,6 @@ df = pd.read_csv(dataset_path)
 print("\nDataset successfully loaded!")
 print("Rows:", df.shape[0])
 print("Columns:", df.shape[1])
-
 
 # ------------------------------------------------------------
 # 2. INITIAL DATA EXPLORATION
@@ -46,7 +43,6 @@ df.info()
 print("\nStatistical summary:")
 print(df.describe(include="all"))
 
-
 # ------------------------------------------------------------
 # 3. MISSING VALUES ANALYSIS
 # ------------------------------------------------------------
@@ -59,7 +55,6 @@ missing_report = pd.DataFrame({
 print("\nMissing values report:")
 print(missing_report)
 
-
 # ------------------------------------------------------------
 # 4. DUPLICATE RECORDS ANALYSIS
 # ------------------------------------------------------------
@@ -69,7 +64,6 @@ duplicate_ticket_ids = df["Ticket ID"].duplicated().sum()
 
 print("\nDuplicate rows:", duplicate_rows)
 print("Duplicate Ticket IDs:", duplicate_ticket_ids)
-
 
 # ------------------------------------------------------------
 # 5. MISSING VALUES BY TICKET STATUS
@@ -92,7 +86,6 @@ print(
     df.groupby("Ticket Status")["Customer Satisfaction Rating"]
     .apply(lambda values: values.isnull().sum())
 )
-
 
 # ------------------------------------------------------------
 # 6. DATA TYPE ANALYSIS AND CONVERSION
@@ -134,7 +127,6 @@ datatype_report = pd.DataFrame({
 print("\nUpdated data type report:")
 print(datatype_report.to_string(index=False))
 
-
 # ------------------------------------------------------------
 # 7. CATEGORICAL VALUE ANALYSIS
 # ------------------------------------------------------------
@@ -157,7 +149,6 @@ for col in categorical_columns:
     print(f"\n{col}:")
     print(df[col].astype("string").str.strip().unique())
 
-
 # ------------------------------------------------------------
 # 8. CUSTOMER AGE VALIDATION
 # ------------------------------------------------------------
@@ -173,7 +164,6 @@ invalid_ages = df[
 
 print("Number of unusual age records:", len(invalid_ages))
 print(invalid_ages[["Ticket ID", "Customer Age"]].head(10))
-
 
 # ------------------------------------------------------------
 # 9. CUSTOMER SATISFACTION RATING VALIDATION
@@ -191,7 +181,6 @@ invalid_ratings = df[
 print("Minimum rating:", df["Customer Satisfaction Rating"].min())
 print("Maximum rating:", df["Customer Satisfaction Rating"].max())
 print("Number of invalid ratings:", len(invalid_ratings))
-
 
 # ------------------------------------------------------------
 # 10. PRODUCT PLACEHOLDER ANALYSIS (BEFORE CLEANING)
@@ -220,7 +209,6 @@ print(
     ].head(10).to_string(index=False)
 )
 
-
 # ------------------------------------------------------------
 # 11. REPEATED TICKET DESCRIPTION ANALYSIS
 # ------------------------------------------------------------
@@ -234,7 +222,6 @@ print(
         ["Ticket ID", "Product Purchased", "Ticket Description"]
     ].head(10).to_string(index=False)
 )
-
 
 # ------------------------------------------------------------
 # 12. MISSING VALUES SUMMARY BY TICKET STATUS
@@ -253,7 +240,6 @@ missing_by_status = df.groupby("Ticket Status").agg(
 print("\nMissing values by ticket status:")
 print(missing_by_status)
 
-
 # ------------------------------------------------------------
 # 13. DATE RANGE ANALYSIS
 # ------------------------------------------------------------
@@ -269,7 +255,6 @@ for col in date_columns_for_range:
     print(f"\n{col}")
     print("Earliest:", df[col].min())
     print("Latest:", df[col].max())
-
 
 # ------------------------------------------------------------
 # 14. RESPONSE AND RESOLUTION DATE VALIDATION
@@ -296,7 +281,6 @@ print(
     (df["Time to Resolution"] > df["Ticket Date"]).sum()
 )
 
-
 # ============================================================
 # PART 2: DATA CLEANING
 # ============================================================
@@ -304,7 +288,6 @@ print(
 print("\n" + "=" * 55)
 print("DATA CLEANING STARTED")
 print("=" * 55)
-
 
 # ------------------------------------------------------------
 # CREATE WORKING COPY
@@ -315,7 +298,6 @@ clean_df = df.copy()
 
 print("Original dataset shape:", df.shape)
 print("Working dataset shape:", clean_df.shape)
-
 
 # ------------------------------------------------------------
 # REMOVE LEADING AND TRAILING SPACES FROM TEXT COLUMNS
@@ -329,7 +311,6 @@ for col in text_columns:
     clean_df[col] = clean_df[col].str.strip()
 
 print("\nLeading and trailing spaces removed from text columns.")
-
 
 # ============================================================
 # STEP 1: STANDARDIZE CATEGORICAL COLUMNS
@@ -352,7 +333,6 @@ for col in categorical_columns:
     )
 
 print("\nStep 1 completed: Categorical values standardized.")
-
 
 # ============================================================
 # STEP 2: MISSING VALUES ANALYSIS
@@ -386,7 +366,6 @@ plt.ylabel("Records")
 plt.tight_layout()
 plt.show()
 
-
 # ============================================================
 # STEP 3: MISSING VALUES ANALYSIS BY TICKET STATUS
 # ============================================================
@@ -419,7 +398,6 @@ missing_percentage_by_status = (
 
 print("\nMissing percentage by ticket status:")
 print(missing_percentage_by_status.round(2))
-
 
 # ============================================================
 # STEP 4: VALIDATE MISSING VALUES AGAINST TICKET STATUS
@@ -465,7 +443,6 @@ print(
 
 print("\nStep 4 completed: Missing values validated against ticket status.")
 
-
 # ============================================================
 # STEP 5: PRODUCT PLACEHOLDER CLEANING
 # ============================================================
@@ -498,7 +475,6 @@ def replace_product_placeholder(row):
         lambda match: str(product),
         description
     )
-
 
 # Replace placeholders in the working copy only
 clean_df["Ticket Description"] = clean_df.apply(
@@ -535,7 +511,6 @@ if not remaining.empty:
 
 print("\nStep 5 completed: Product placeholder cleaning checked.")
 
-
 # ------------------------------------------------------------
 # SUMMARY THROUGH STEP 5
 # ------------------------------------------------------------
@@ -556,7 +531,6 @@ print("\nCleaned dataset preview:")
 print(clean_df.head())
 
 print("\nAnalysis and cleaning through Step 5 completed.")
-
 
 # ============================================================
 # STEP 6: DATE AND TIME VALIDATION
@@ -580,7 +554,6 @@ for col in date_columns:
     print("Data Type:", clean_df[col].dtype)
 
 print("\nSTEP 6 COMPLETED!")
-
 
 # ============================================================
 # STEP 7: CUSTOMER AGE VALIDATION
@@ -665,7 +638,6 @@ print(
 )
 
 print("\nSTEP 8 COMPLETED!")
-
 
 # ============================================================
 # STEP 9: CATEGORICAL DATA VALIDATION
@@ -908,7 +880,7 @@ print("Exported Columns:", clean_df.shape[1])
 
 print("\nPART 2: DATA CLEANING COMPLETED!")
 
-# STEP 16: TICKET STATUS DISTRIBUTION
+# STEP 15: TICKET STATUS DISTRIBUTION
 
 print("\nSTEP 16: TICKET STATUS DISTRIBUTION")
 
@@ -927,7 +899,7 @@ plt.show()
 
 print("\nSTEP 16 COMPLETED!")
 
-# STEP 17: TICKET PRIORITY ANALYSIS
+# STEP 16: TICKET PRIORITY ANALYSIS
 
 priority_count = clean_df["Ticket Priority"].value_counts()
 
@@ -953,7 +925,7 @@ type_count.plot(kind="bar", title="Ticket Type Distribution",
 plt.tight_layout()
 plt.show()
 
-# STEP 19: CUSTOMER GENDER AND AGE ANALYSIS
+# STEP 17: CUSTOMER GENDER AND AGE ANALYSIS
 
 print("\nCustomer Gender Distribution:")
 print(clean_df["Customer Gender"].value_counts())
@@ -975,7 +947,7 @@ plt.tight_layout()
 plt.show()
 
 
-# STEP 20: PRODUCT-WISE TICKET ANALYSIS
+# STEP 18: PRODUCT-WISE TICKET ANALYSIS
 
 product_count = clean_df["Product Purchased"].value_counts()
 
@@ -990,7 +962,7 @@ product_count.head(10).plot(
 plt.tight_layout()
 plt.show()
 
-# STEP 21: TICKET CHANNEL ANALYSIS
+# STEP 19: TICKET CHANNEL ANALYSIS
 
 channel_count = clean_df["Ticket Channel"].value_counts()
 
@@ -1004,7 +976,7 @@ channel_count.plot(
 plt.ylabel("")
 plt.show()
 
-# STEP 22: CUSTOMER SATISFACTION ANALYSIS
+# STEP 20: CUSTOMER SATISFACTION ANALYSIS
 
 rating_count = clean_df["Customer Satisfaction Rating"].value_counts().sort_index()
 
@@ -1022,8 +994,7 @@ rating_count.plot(
 plt.tight_layout()
 plt.show()
 
-
-# STEP 23: RESPONSE AND RESOLUTION TIME ANALYSIS
+# STEP 21: RESPONSE AND RESOLUTION TIME ANALYSIS
 
 time_columns = ["First Response Time", "Time to Resolution"]
 
@@ -1047,7 +1018,7 @@ plt.show()
 
 print("\nSTEP 23 COMPLETED!")
 
-# STEP 24: KEY BUSINESS INSIGHTS
+# STEP 22: KEY BUSINESS INSIGHTS
 
 print("\nKEY BUSINESS INSIGHTS")
 
