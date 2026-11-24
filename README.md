@@ -111,19 +111,26 @@ The dashboard focuses on:
 AI-Customer-Support-Ticket-Intelligence/
 │
 ├── Dataset/
-│   └── raw/
-│       └── customer_support_tickets.csv
+│   ├── raw/
+│   │   └── customer_support_tickets.csv
+│   │
+│   └── processed/
+│       └── cleaned_customer_support_tickets.csv
 │
 ├── Python/
-│   └── [Python analysis script]
+│   └── customer_support_analysis.py
 │
 ├── SQL/
 │   └── QUERIES.sql
 │
 ├── PowerBI/
-│   └── Dashboard screenshots
+│   └── Screenshots/
+│       ├── Page1_Ticket_Overview.png
+│       ├── Page2_Ticket_Analysis.png
+│       └── Page3_Customer_Insights.png
 │
 ├── README.md
+├── requirements.txt
 ├── .gitignore
 └── LICENSE
 ```
